@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LKPD - Analisis Risiko Usaha IoT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #1e3c72;
+            border-left: 5px solid #667eea;
+            padding-left: 15px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .case-study {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .case-study h3 {
+            color: #2a5298;
+            margin-bottom: 15px;
+        }
+
+        .case-study ul {
+            margin-left: 20px;
+        }
+
+        .case-study li {
+            margin-bottom: 8px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:hover {
+            background: #f8f9ff;
+        }
+
+        .risk-high {
+            background: #ffebee;
+            font-weight: bold;
+            color: #c62828;
+        }
+
+        .risk-medium {
+            background: #fff8e1;
+            font-weight: bold;
+            color: #f57c00;
+        }
+
+        .risk-low {
+            background: #e8f5e9;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .question {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .question h3 {
+            color: #e65100;
+            margin-bottom: 15px;
+        }
+
+        .answer {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .answer h4 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+
+        .answer ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .answer li {
+            margin-bottom: 8px;
+        }
+
+        .conclusion {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 5px solid #00acc1;
+        }
+
+        .conclusion h3 {
+            color: #006064;
+            margin-bottom: 15px;
+        }
+
+        .btn-print {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+        }
+
+        .btn-print:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .btn-print {
+                display: none;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 1.5em;
+            }
+            table {
+                font-size: 0.9em;
+            }
+            th, td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 LEMBAR KERJA PESERTA DIDIK (LKPD)</h1>
+            <p><strong>Mata Pelajaran:</strong> Kreativitas, Inovasi, dan Kewirausahaan</p>
+            <p><strong>Topik:</strong> Analisis Risiko Usaha Sistem IoT (Internet of Things)</p>
+            <p><strong>Jurusan:</strong> Teknik Elektronika Industri (TEI)</p>
+        </div>
+
+        <div class="content">
+            <!-- Section A: Situasi Kasus -->
+            <div class="section">
+                <h2>A. Situasi Kasus (Problem Statement)</h2>
+                <div class="case-study">
+                    <h3>🏢 ElectroSmart Solutions</h3>
+                    <p>Kelompok Anda adalah sebuah <em>startup</em> bernama <strong>"ElectroSmart Solutions"</strong>. Anda mendapatkan kontrak senilai <strong>Rp25.000.000</strong> untuk memasang sistem monitoring suhu gudang berbasis IoT sebanyak 20 titik dalam waktu 2 minggu.</p>
+                    
+                    <h4 style="margin-top: 15px; color: #c62828;">⚠️ Kondisi saat ini:</h4>
+                    <ul>
+                        <li>Komponen mikrokontroler harus diimpor dan rawan terlambat datang</li>
+                        <li>Tim teknis (teman sekelasmu) belum pernah memasang sensor di area dengan suhu ekstrem</li>
+                        <li>PCB didesain sendiri dan belum diuji ketahanan jangka panjangnya</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section B: Tabel Analisis Risiko -->
+            <div class="section">
+                <h2>B. Tabel Analisis Risiko</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Identifikasi Kejadian Risiko</th>
+                                <th>Peluang (1-5)</th>
+                                <th>Dampak (1-5)</th>
+                                <th>Skor (P×D)</th>
+                                <th>Tingkat Risiko</th>
+                                <th>Rencana Mitigasi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><strong>Keterlambatan kiriman komponen impor</strong></td>
+                                <td style="text-align: center;">4</td>
+                                <td style="text-align: center;">5</td>
+                                <td style="text-align: center;"><span class="score-badge risk-high">20</span></td>
+                                <td class="risk-high">TINGGI</td>
+                                <td>
+                                    • Pesan komponen 1 minggu lebih awal<br>
+                                    • Siapkan supplier lokal sebagai backup<br>
+                                    • Komunikasi rutin dengan supplier<br>
+                                    • Buat buffer stock untuk komponen kritis
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><strong>Kesalahan desain jalur PCB (Konslet)</strong></td>
+                                <td style="text-align: center;">3</td>
+                                <td style="text-align: center;">4</td>
+                                <td style="text-align: center;"><span class="score-badge risk-medium">12</span></td>
+                                <td class="risk-medium">SEDANG</td>
+                                <td>
+                                    • Lakukan simulasi software (Proteus/Eagle)<br>
+                                    • Peer review desain oleh minimal 2 teknisi<br>
+                                    • Buat prototipe dan test terlebih dahulu<br>
+                                    • Gunakan jasa PCB terpercaya
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><strong>Sensor tidak akurat karena suhu ekstrem</strong></td>
+                                <td style="text-align: center;">4</td>
+                                <td style="text-align: center;">4</td>
+                                <td style="text-align: center;"><span class="score-badge risk-high">16</span></td>
+                                <td class="risk-high">TINGGI</td>
+                                <td>
+                                    • Pilih sensor industrial grade<br>
+                                    • Testing di kondisi ekstrem sebelum instalasi<br>
+                                    • Tambahkan housing/casing pelindung<br>
+                                    • Kalibrasi sensor berkala<br>
+                                    • Gunakan sensor dengan kompensasi suhu
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><strong>Kecelakaan kerja saat pemasangan (K3)</strong></td>
+                                <td style="text-align: center;">2</td>
+                                <td style="text-align: center;">3</td>
+                                <td style="text-align: center;"><span class="score-badge risk-low">6</span></td>
+                                <td class="risk-low">RENDAH</td>
+                                <td>
+                                    • Briefing K3 sebelum kerja<br>
+                                    • Gunakan APD lengkap<br>
+                                    • Pastikan area kerja aman<br>
+                                    • Sediakan kotak P3K<br>
+                                    • Kerja dengan buddy system
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Section C: Pertanyaan Analisis -->
+            <div class="section">
+                <h2>C. Pertanyaan Analisis</h2>
+                
+                <!-- Pertanyaan 1 -->
+                <div class="question">
+                    <h3>Pertanyaan 1:</h3>
+                    <p>Berdasarkan tabel di atas, risiko mana yang memiliki skor tertinggi? Mengapa risiko tersebut sangat berbahaya bagi keberlangsungan usaha ElectroSmart Solutions?</p>
+                    
+                    <div class="answer">
+                        <h4>📝 Jawaban:</h4>
+                        <p>Risiko dengan skor tertinggi adalah <strong>Keterlambatan kiriman komponen impor (Skor 20)</strong>. Risiko ini sangat berbahaya karena:</p>
+                        <ul>
+                            <li><strong>Dampak finansial langsung:</strong> Jika proyek terlambat, perusahaan bisa terkena denda keterlambatan yang dipotong dari nilai kontrak Rp25.000.000, bahkan bisa kehilangan kontrak sepenuhnya</li>
+                            <li><strong>Efek domino:</strong> Keterlambatan komponen akan menghambat seluruh proses produksi, testing, dan instalasi. Dalam waktu 2 minggu yang sangat ketat, kehilangan 3-4 hari saja bisa membuat deadline tidak tercapai</li>
+                            <li><strong>Reputasi hancur:</strong> Sebagai startup baru, kegagalan di proyek pertama akan merusak kredibilitas di mata klien dan industri. Klien tidak akan merekomendasikan kita ke perusahaan lain</li>
+                            <li><strong>Modal terbuang:</strong> Biaya operasional tetap berjalan (sewa tempat, gaji tim) meskipun pekerjaan tertunda, ini akan menguras kas perusahaan</li>
+                            <li><strong>Peluang tinggi:</strong> Komponen impor memang sering terlambat karena masalah bea cukai, logistik internasional, atau ketersediaan stok di negara asal</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Pertanyaan 2 -->
+                <div class="question">
+                    <h3>Pertanyaan 2:</h3>
+                    <p>Jika risiko nomor 1 benar-benar terjadi (barang tidak datang hingga hari H), apa <strong>Rencana Cadangan (Contingency Plan)</strong> yang paling masuk akal agar Anda tidak didenda oleh pelanggan?</p>
+                    
+                    <div class="answer">
+                        <h4>📝 Jawaban:</h4>
+                        
+                        <h4>A. Immediate Action (0-24 jam):</h4>
+                        <ul>
+                            <li>Segera komunikasikan situasi kepada klien secara transparan dan profesional</li>
+                            <li>Ajukan negosiasi perpanjangan waktu 3-5 hari dengan kompensasi (misal: garansi diperpanjang atau diskon 5%)</li>
+                            <li>Aktifkan supplier backup lokal yang sudah disiapkan, meskipun harganya lebih mahal (masih lebih baik daripada kehilangan kontrak)</li>
+                        </ul>
+
+                        <h4>B. Alternative Solution:</h4>
+                        <ul>
+                            <li>Gunakan komponen pengganti (substitute) yang compatible dan tersedia lokal, dengan persetujuan klien terlebih dahulu</li>
+                            <li>Jika memungkinkan, sewakan/pinjam komponen dari rekan sesama teknisi dengan perjanjian penggantian nanti</li>
+                            <li>Implementasikan sistem bertahap: pasang yang bisa dipasang dulu (misal: 10 titik), sisanya menyusul saat komponen datang</li>
+                        </ul>
+
+                        <h4>C. Damage Control:</h4>
+                        <ul>
+                            <li>Tawarkan kompensasi berupa layanan maintenance gratis selama 6 bulan</li>
+                            <li>Pastikan kualitas instalasi sempurna untuk membuktikan profesionalisme meskipun ada kendala</li>
+                            <li>Dokumentasikan proses dengan baik untuk menunjukkan transparansi</li>
+                        </ul>
+
+                        <p style="margin-top: 15px; padding: 15px; background: #e3f2fd; border-radius: 5px;">
+                            <strong>💡 Prinsip:</strong> Komunikasi proaktif lebih baik daripada membiarkan klien menunggu tanpa kabar. Klien akan lebih menghargai kejujuran dan solusi alternatif daripada janji kosong.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Pertanyaan 3 -->
+                <div class="question">
+                    <h3>Pertanyaan 3:</h3>
+                    <p>Bagaimana pengaruh kegagalan proyek ini terhadap reputasi Anda sebagai lulusan TEI di mata industri?</p>
+                    
+                    <div class="answer">
+                        <h4>📝 Jawaban:</h4>
+                        <p>Pengaruh kegagalan proyek terhadap reputasi sangat <strong>signifikan dan berjangka panjang:</strong></p>
+                        
+                        <h4 style="color: #c62828;">⚠️ Dampak Negatif:</h4>
+                        <ul>
+                            <li><strong>Word of mouth negatif:</strong> Industri elektronika adalah komunitas yang kecil dan saling terhubung. Satu kegagalan akan cepat tersebar di kalangan praktisi dan perusahaan</li>
+                            <li><strong>Kehilangan kesempatan masa depan:</strong> Perusahaan lain akan ragu memberikan proyek kepada kita, karena rekam jejak buruk di proyek pertama menunjukkan ketidakmampuan mengelola risiko</li>
+                            <li><strong>Label "tidak profesional":</strong> Lulusan TEI yang tidak bisa menyelesaikan proyek IoT sederhana akan dianggap kurang kompeten, meskipun sebenarnya masalah ada di supply chain</li>
+                            <li><strong>Sulit mendapat investor:</strong> Jika ingin mengembangkan startup, investor akan melakukan background check dan melihat track record proyek</li>
+                            <li><strong>Menurunkan value almamater:</strong> Kegagalan kita bisa mempengaruhi persepsi industri terhadap kualitas lulusan sekolah/kampus kita</li>
+                        </ul>
+
+                        <h4 style="color: #2e7d32;">✅ Pembelajaran Penting:</h4>
+                        <ul>
+                            <li>Reputasi dibangun dalam waktu lama, tapi bisa hancur dalam sekejap</li>
+                            <li>Di era digital, review dan testimoni klien sangat berpengaruh terhadap karir</li>
+                            <li>Profesionalisme bukan hanya soal skill teknis, tapi juga manajemen proyek dan komunikasi</li>
+                            <li>Sebagai lulusan TEI, kita harus membuktikan bahwa kita tidak hanya pandai teori, tapi juga mampu deliver hasil di dunia nyata</li>
+                        </ul>
+
+                        <p style="margin-top: 15px; padding: 15px; background: #fff3e0; border-radius: 5px; border-left: 4px solid #ff9800;">
+                            <strong>🎯 Kesimpulan:</strong> Proyek pertama adalah "kartu nama" kita di industri. Keberhasilannya akan membuka banyak pintu peluang, sebaliknya kegagalan akan menutup pintu tersebut untuk waktu yang lama.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section D: Kesimpulan -->
+            <div class="section">
+                <h2>D. Kesimpulan</h2>
+                <div class="conclusion">
+                    <h3>🎓 Kesimpulan Kelompok</h3>
+                    <p>"Setelah melakukan analisis, kelompok kami menyimpulkan bahwa untuk menjaga keberlangsungan usaha, hal utama yang harus kami siapkan sebelum memulai proyek adalah:</p>
+                    
+                    <ol style="margin: 15px 0 15px 25px;">
+                        <li style="margin-bottom: 10px;"><strong>Supply Chain Management yang solid</strong> - memiliki minimal 2 supplier (utama dan backup) untuk komponen kritis, serta memesan komponen jauh-jauh hari dengan buffer waktu minimum 1 minggu dari jadwal produksi.</li>
+                        
+                        <li style="margin-bottom: 10px;"><strong>Risk Assessment & Mitigation Plan</strong> - melakukan analisis risiko menyeluruh sebelum menerima kontrak, termasuk menghitung worst-case scenario dan memastikan kita punya solusi untuk setiap risiko tinggi.</li>
+                        
+                        <li style="margin-bottom: 10px;"><strong>Prototype & Testing Phase</strong> - tidak langsung masuk produksi massal, tapi membuat prototipe untuk validasi desain dan testing di kondisi real, sehingga kesalahan teknis bisa dideteksi lebih awal.</li>
+                        
+                        <li style="margin-bottom: 10px;"><strong>Komunikasi transparan dengan klien</strong> - membangun ekspektasi yang realistis sejak awal, termasuk menjelaskan potensi risiko dan rencana mitigasinya, sehingga klien memahami kompleksitas proyek.</li>
+                        
+                        <li style="margin-bottom: 10px;"><strong>Tim yang kompeten dan terlatih</strong> - memastikan semua anggota tim memiliki skill teknis yang memadai dan pemahaman K3 yang baik, serta melakukan simulasi/dry run sebelum eksekusi di lapangan.</li>
+                    </ol>
+
+                    <p style="margin-top: 15px; font-weight: bold; color: #006064;">Dengan persiapan matang ini, kami percaya bahwa ElectroSmart Solutions dapat menyelesaikan proyek dengan sukses dan membangun reputasi positif sebagai startup yang profesional dan dapat diandalkan."</p>
+                </div>
+            </div>
+
+            <button class="btn-print" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+        </div>
+    </div>
+
+    <script>
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+
+        // Print message
+        window.addEventListener('beforeprint', () => {
+            console.log('Memulai proses cetak...');
+        });
+
+        window.addEventListener('afterprint', () => {
+            console.log('Proses cetak selesai');
+        });
+    </script>
+</body>
+</html>
